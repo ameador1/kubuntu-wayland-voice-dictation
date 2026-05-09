@@ -136,4 +136,4 @@ Working. Documentation-only repo describing a live, in-use setup.
 
 ## License
 
-This documentation is released as-is. Handy itself is MIT-licensed by its authors at https://github.com/cjpais/Handy.
+This documentation is released under [CC BY 4.0](LICENSE) — share, adapt, and reuse freely with attribution. Handy itself is MIT-licensed by its authors at https://github.com/cjpais/Handy.
