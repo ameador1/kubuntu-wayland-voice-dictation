@@ -110,13 +110,13 @@ Launch Handy from the application launcher; it should appear in the system tray 
 
 This is where you download speech models and pick which one is active.
 
-- **Parakeet v2** — well-tested, smaller, fast on CPU. Currently active in this setup.
-- **Parakeet v3** — newer iteration. Worth downloading alongside v2 to A/B test on your own speech.
-- **Whisper variants** (large-v3-turbo, medium, etc.) — alternative model family if Parakeet underperforms on your speech.
+- **Parakeet v2** — **English-only**, higher accuracy. The recommended pick if you only dictate in English. Active in this setup.
+- **Parakeet v3** — multilingual. Slightly lower accuracy than v2 (Handy's own model listing notes the trade-off). Pick this if you need a language other than English.
+- **Whisper variants** (large-v3-turbo, medium, etc.) — alternative model family if Parakeet underperforms on your speech or domain.
 
-**Recommendation:** download **Parakeet v3** first and use it; fall back to v2 if you find v3's accuracy worse for your voice or domain. Both are small enough to keep installed.
+**Recommendation:** download **Parakeet v2** if you only dictate in English — it's noticeably more accurate in side-by-side testing. Download v3 only if multilingual support matters; otherwise the multilingual capability isn't free, you trade accuracy for it.
 
-You can have multiple models downloaded; Handy uses whichever you've marked active. Switching is instant from the Models menu — no config file editing.
+You can have multiple models downloaded simultaneously; Handy uses whichever you've marked active. Switching is instant from the Models menu — no config file editing.
 
 The first model download pulls a few hundred megabytes. Allow a minute or two.
 
@@ -192,13 +192,17 @@ What you actually get:
 
 This may not match what older notes (including a previous version of this README) claimed. It's documented honestly here.
 
-**If you want true auto-paste**, the path is:
+**If you want true auto-paste**, the workaround uses one of two third-party Linux utilities:
 
-1. Install `ydotool` (`sudo apt install ydotool`) or `dotool`. Both inject input events at a layer below the Wayland protocol that bypasses the cross-window restriction.
-2. Make sure the daemon is running and your user has access to `/dev/uinput` (the install may require an `input` group membership and a logout/login).
-3. If your version of Handy exposes a "Typing Tool" setting, point it at `ydotool` or `dotool` explicitly. Otherwise, the auto-paste behavior depends on Handy detecting the tool on `$PATH`.
+- **`ydotool`** and **`dotool`** are small, separate command-line programs (not part of Handy) that inject keyboard and mouse input at the **kernel** level — through `/dev/uinput` — instead of going through the Wayland protocol. Because the kernel sees them as just another input device, Wayland's cross-window restriction doesn't apply. They exist precisely as a workaround for Wayland's input-injection lockdown. Pick either; they do the same job.
 
-This setup is **not** configured here — manual paste with `Shift+Insert` is fine for the current dictation volume, and a daemon + uinput permissions is more system surface than is worth maintaining for a single keystroke saved.
+The setup steps are roughly:
+
+1. Install one of them: `sudo apt install ydotool` (or `dotool` from its own packaging).
+2. Start its background daemon and make sure your user can access `/dev/uinput` — this usually means joining the `input` group and logging out/in. The package documentation will spell it out.
+3. If your version of Handy exposes a "Typing Tool" setting, point it at `ydotool` or `dotool` explicitly. Otherwise Handy auto-detects whichever is on `$PATH`.
+
+This setup is **not** configured here — manual paste with `Shift+Insert` is fine for the current dictation volume, and the daemon + uinput permission setup is more system surface than is worth maintaining for one keystroke saved per dictation. If you find yourself dictating heavily enough that the manual paste is real friction, the `ydotool`/`dotool` route is the documented escape hatch.
 
 ## Verified Working
 
